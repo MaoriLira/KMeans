@@ -13,80 +13,80 @@ import java.util.Arrays;
  */
 public class FuzzyMeans {
 
-    public FuzzyMeans(Double[][] objetos, Double[][] centros, int m) {
-        this.objetos = objetos;
-        this.centros = centros;
+    public FuzzyMeans(Double[][] objetosFuzzy, Double[][] centrosFuzzy, int m) {
+        this.objetosFuzzy = objetosFuzzy;
+        this.centrosFuzzy = centrosFuzzy;
         this.m = m;
     }
 
     
     
-    private Double[][] objetos;
-    private Double[][] centros;
-    private Double [][] nuevaMatrizObjetos;
-    private Double [][] matrizGradosPertenencia;
-    private Double costo;
+    private Double[][] objetosFuzzy;
+    private Double[][] centrosFuzzy;
+    private Double [][] nuevaMatrizObjetosFuzzy;
+    private Double [][] matrizGradosPertenenciaFuzzy;
+    private Double costoFuzzy;
     int m;
     
-    private double calcularDistanciaEuclidiana(Double objetos[], Double[]centro){
+    private double calcularDistanciaEuclidiana(Double objetosFuzzy[], Double[]centroFuzzy){
         double distanciaEuclidiana = 0;
-        for (int i = 0; i < objetos.length; i++) {
-            distanciaEuclidiana += Math.pow((objetos[i] - centro[i]), 2);
+        for (int i = 0; i < objetosFuzzy.length; i++) {
+            distanciaEuclidiana += Math.pow((objetosFuzzy[i] - centroFuzzy[i]), 2);
         }
         distanciaEuclidiana = Math.sqrt(distanciaEuclidiana);
         return distanciaEuclidiana;
     }
     
     public void matrizDistancia(){
-        nuevaMatrizObjetos = new Double[objetos.length][centros.length];
-        for (int i = 0; i < objetos.length; i++) {
-            for (int j = 0; j < centros.length; j++) {
-                nuevaMatrizObjetos[i][j] = calcularDistanciaEuclidiana(objetos[i], centros[j]); 
+        nuevaMatrizObjetosFuzzy = new Double[objetosFuzzy.length][centrosFuzzy.length];
+        for (int i = 0; i < objetosFuzzy.length; i++) {
+            for (int j = 0; j < centrosFuzzy.length; j++) {
+                nuevaMatrizObjetosFuzzy[i][j] = calcularDistanciaEuclidiana(objetosFuzzy[i], centrosFuzzy[j]); 
             }
         }
     }
     public Double[][] mostrarDistancia(){
-        System.out.println(Arrays.deepToString(nuevaMatrizObjetos)); 
-        return nuevaMatrizObjetos;
+        System.out.println(Arrays.deepToString(nuevaMatrizObjetosFuzzy)); 
+        return nuevaMatrizObjetosFuzzy;
     }
     private double gradosPertenencia(int i, int j){
         double grado = 0;
         double sumaDivisor = 0;
         
-            for (int k = 0; k < nuevaMatrizObjetos[i].length; k++) {
+            for (int k = 0; k < nuevaMatrizObjetosFuzzy[i].length; k++) {
                 sumaDivisor += Math.pow(
-                    (nuevaMatrizObjetos[i][j]/nuevaMatrizObjetos[i][k]), (2/(m-1)));
+                    (nuevaMatrizObjetosFuzzy[i][j]/nuevaMatrizObjetosFuzzy[i][k]), (2/(m-1)));
             }
             
         grado = 1/sumaDivisor;
         return grado;
     }
     public void matrizGrados(){
-        matrizGradosPertenencia = new Double[objetos.length][centros.length];
-        for (int i = 0; i < objetos.length; i++) {
-            for (int j = 0; j < centros.length; j++) {
-                matrizGradosPertenencia[i][j] = gradosPertenencia(i,j); 
+        matrizGradosPertenenciaFuzzy = new Double[objetosFuzzy.length][centrosFuzzy.length];
+        for (int i = 0; i < objetosFuzzy.length; i++) {
+            for (int j = 0; j < centrosFuzzy.length; j++) {
+                matrizGradosPertenenciaFuzzy[i][j] = gradosPertenencia(i,j); 
             }
         }
     }
     public Double[][] mostarGrados(){
-        System.out.println(Arrays.deepToString(matrizGradosPertenencia));
-        return matrizGradosPertenencia;
+        System.out.println(Arrays.deepToString(matrizGradosPertenenciaFuzzy));
+        return matrizGradosPertenenciaFuzzy;
     }
     private Double[] nuevoCentros(int centroide){
-        Double centro[]=new Double[centros[0].length];
+        Double centro[]=new Double[centrosFuzzy[0].length];
         double sumaDivisior = 0;
         
         
-        for (int i = 0; i < matrizGradosPertenencia.length; i++) {
-            sumaDivisior += Math.pow(matrizGradosPertenencia[i][centroide], m);
+        for (int i = 0; i < matrizGradosPertenenciaFuzzy.length; i++) {
+            sumaDivisior += Math.pow(matrizGradosPertenenciaFuzzy[i][centroide], m);
             
         }
         
          for (int i = 0; i < centro.length; i++) {
             double sumaDividendo = 0;
-            for (int j = 0; j < matrizGradosPertenencia.length; j++) {
-                sumaDividendo += ((Math.pow(matrizGradosPertenencia[j][centroide], m))* (objetos[j][i]));               
+            for (int j = 0; j < matrizGradosPertenenciaFuzzy.length; j++) {
+                sumaDividendo += ((Math.pow(matrizGradosPertenenciaFuzzy[j][centroide], m))* (objetosFuzzy[j][i]));               
             }
              centro[i] = sumaDividendo/sumaDivisior;
              
@@ -94,21 +94,21 @@ public class FuzzyMeans {
          return centro;
     }
     public void calcularCentros(){
-        for (int i = 0; i < centros.length; i++) {
-            centros[i] = nuevoCentros(i);
+        for (int i = 0; i < centrosFuzzy.length; i++) {
+            centrosFuzzy[i] = nuevoCentros(i);
         }
     }
     public Double[][] mostrarNuevoCentros(){
-        System.out.println(Arrays.deepToString(centros));
-        return centros;
+        System.out.println(Arrays.deepToString(centrosFuzzy));
+        return centrosFuzzy;
     }
     public Double costo(){
         Double costoTotal = 0.0;
-        for (int i = 0; i < nuevaMatrizObjetos.length; i++) {
+        for (int i = 0; i < nuevaMatrizObjetosFuzzy.length; i++) {
             Double suma=0.0;
             
-            for (int j = 0; j < matrizGradosPertenencia[i].length; j++) {
-                suma += Math.pow(nuevaMatrizObjetos[i][j], 2) + Math.pow(matrizGradosPertenencia[i][j], m);
+            for (int j = 0; j < matrizGradosPertenenciaFuzzy[i].length; j++) {
+                suma += Math.pow(nuevaMatrizObjetosFuzzy[i][j], 2) + Math.pow(matrizGradosPertenenciaFuzzy[i][j], m);
             }
             costoTotal+=suma;
             
@@ -116,8 +116,8 @@ public class FuzzyMeans {
         return costoTotal;
     }
     public Double mostrarCosto(){
-        costo = costo();
-        System.out.println(costo);
-        return costo;
+        costoFuzzy = costo();
+        System.out.println(costoFuzzy);
+        return costoFuzzy;
     }
 }

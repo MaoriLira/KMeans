@@ -135,28 +135,6 @@ public class Inicio extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        //        Double[][]objetos={{1.0,1.0},{1.0,3.0},{1.0,4.0},{2.0,2.0},
-            //            {2.0,3.0},{4.0,1.0},{6.0,6.0},{7.0,7.0},{7.0,8.0},{8.0,5.0},{8.0,6.0},
-            //            {8.0,1.0}};
-        //        Double[][]centros={{4.0,4.0},{5.0,4.0}};
-        //        int m = 2;
-        //        KMeans cluster=new KMeans(objetos,centros);
-        //        cluster.matrizDistancia();
-        //        cluster.mostrarDistancia();
-        //        cluster.matrizPertenencia();
-        //        cluster.mostrarPertenencia();
-        //        cluster.calcularCentros();
-        //        cluster.mostrarCentros();
-        //        cluster.costo();
-        //        cluster.mostrarCosto();
-        //        FuzzyMeans cluster1 = new FuzzyMeans(objetos, centros, m);
-        //        cluster1.matrizDistancia();
-        //        cluster1.mostrarDistancia();
-        //        cluster1.matrizGrados();
-        //        cluster1.mostarGrados();
-        //        cluster1.calcularCentros();
-        //        cluster1.mostrarNuevoCentros();
         String [] linea = jTextArea1.getText().split("\n");
         Double [][] objetos = new Double [linea.length][linea[0].split(",").length];
         for (int i = 0; i < objetos.length; i++) {
@@ -175,15 +153,30 @@ public class Inicio extends javax.swing.JFrame {
             }
         }
         
-        System.out.println(Arrays.deepToString(objetos));
-        System.out.println(Arrays.deepToString(centros));
+        KMeans cluster=new KMeans(objetos,centros);
         
+        String [] lineaFuzzy = jTextArea1.getText().split("\n");
+        Double [][] objetosFuzzy = new Double [lineaFuzzy.length][lineaFuzzy[0].split(",").length];
+        for (int i = 0; i < objetosFuzzy.length; i++) {
+            String[] texto = lineaFuzzy[i].split(",");
+            for (int j = 0; j < objetosFuzzy[i].length; j++) {
+                objetosFuzzy[i][j] = Double.parseDouble(texto[j]);
+            }
+        }
+        
+        lineaFuzzy = jTextArea2.getText().split("\n");
+        Double [][] centrosFuzzy = new Double [lineaFuzzy.length][lineaFuzzy[0].split(",").length];
+        for (int i = 0; i < centrosFuzzy.length; i++) {
+            String[] texto = lineaFuzzy[i].split(",");
+            for (int j = 0; j < centrosFuzzy[i].length; j++) {
+                centrosFuzzy[i][j] = Double.parseDouble(texto[j]);
+            }
+        }
         int m=Integer.parseInt(jTextField1.getText());
         
-        KMeans cluster=new KMeans(objetos,centros);
-        FuzzyMeans cluster1 = new FuzzyMeans(objetos, centros, m);
+        FuzzyMeans clusterFuzzy = new FuzzyMeans(objetosFuzzy, centrosFuzzy, m);
         
-        Iteracion siguiente=new Iteracion(cluster,cluster1,1);
+        Iteracion siguiente=new Iteracion(cluster,clusterFuzzy,1);
         siguiente.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 

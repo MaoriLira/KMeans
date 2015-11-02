@@ -82,7 +82,6 @@ public class KMeans {
     }
     private Double[] nuevoCentro(int centroide){
         Double centro[]=new Double[centros[0].length];
-        System.out.println(centroide);
         
         for (int i = 0; i < centro.length; i++) {
             Double suma=0.0;
@@ -129,4 +128,5 @@ public class KMeans {
         System.out.println(costo);
         return costo;
     }
+
 }
